@@ -3,16 +3,18 @@
 ////
 // CONFIGURATION SETTINGS
 ////
-var FETCH_INTERVAL = 5000;
-var PRETTY_PRINT_JSON = true;
+const FETCH_INTERVAL = 5000;
+const PRETTY_PRINT_JSON = true;
 
 ////
 // START
 ////
 var express = require('express');
+var app = express();
 var http = require('http');
 var io = require('socket.io');
 var cors = require('cors');
+// var Promise = require('promise');
 
 function getRandomValBetween(min, max, precision) {
   min = min === undefined ? 0 : min;
@@ -62,6 +64,8 @@ function trackTicker(socket, ticker) {
 }
 
 var app = express();
+
+// enable CORS
 app.use(cors());
 var server = http.createServer(app);
 
@@ -78,4 +82,16 @@ io.sockets.on('connection', function(socket) {
   });
 });
 
-server.listen(process.env.PORT || 4000);
+io.on('connection', (socket) => {
+  console.log(`User Connected`);
+
+  socket.on('send_ticker', (ticker) => {
+    console.log(`ticker: ${ticker}`);
+    socket.emit('received_ticker', ticker);
+  })
+})
+
+
+server.listen(process.env.PORT || 4000, () => {
+  console.log(`Server running on port ${process.env.PORT || 4000}`);
+});

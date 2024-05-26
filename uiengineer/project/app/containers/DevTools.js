@@ -11,5 +11,6 @@ export default createDevTools(
     <DockMonitor toggleVisibilityKey="ctrl-h" changePositionKey="ctrl-y">
         <LogMonitor />
         {/* <ChartMonitor /> */}
+
     </DockMonitor>
 );

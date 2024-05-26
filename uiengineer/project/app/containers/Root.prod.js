@@ -12,7 +12,9 @@ export default function Root({ store, history }) {
             <div>
                 <BrowserRouter>
                     <Route path="/">
+                        <ConnectedRouter history={history}>
                         <App />
+                        </ConnectedRouter>
                     </Route>
                 </BrowserRouter>
             </div>
