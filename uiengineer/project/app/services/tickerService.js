@@ -1,5 +1,4 @@
 import io from 'socket.io-client';
-// import Promise from
 
 let  socket = null;
 
@@ -10,8 +9,8 @@ export const connect = (stockSymbol) => {
         socket.on('connect', () => {
             console.log('connected');
 
-            socket.on(stockSymbol, (data) => {
-                console.log(data);
+            socket.on('ticker', (data) => {
+                console.log(`received ticker: ${data}`);
                 resolve(data); // Resolve the promise with the received data
             });
 

@@ -44,7 +44,7 @@ function getQuote(socket, ticker) {
   quote.dividend = getRandomValBetween(0, 1, 2);
   quote.yield = getRandomValBetween(0, 2, 2);
 
-  socket.emit(ticker, PRETTY_PRINT_JSON ? JSON.stringify(quote, null, 4) : JSON.stringify(quote));
+  socket.broadcast.emit('ticker', PRETTY_PRINT_JSON ? JSON.stringify(quote, null, 4) : JSON.stringify(quote));
 }
 
 function trackTicker(socket, ticker) {
@@ -76,20 +76,13 @@ app.get('/', function(req, res) {
   res.sendfile(__dirname + '/index.html');
 });
 
-io.sockets.on('connection', function(socket) {
+io.on('connection', function(socket) {
+  console.log(`User Connected to trackTicker`);
+  console.log(socket);
   socket.on('ticker', function(ticker) {
     trackTicker(socket, ticker);
   });
 });
-
-io.on('connection', (socket) => {
-  console.log(`User Connected`);
-
-  socket.on('send_ticker', (ticker) => {
-    console.log(`ticker: ${ticker}`);
-    socket.emit('received_ticker', ticker);
-  })
-})
 
 
 server.listen(process.env.PORT || 4000, () => {
